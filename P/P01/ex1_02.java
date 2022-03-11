@@ -1,6 +1,7 @@
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ex1_02 {
     static HashMap<String, Object> map = new HashMap<String, Object>();
@@ -9,10 +10,10 @@ public class ex1_02 {
     public static void main(String[] args) {
         while (true) {
             try {
-                System.out.print("New line: ");
+                System.out.print("$ ");
                 String n = sc.nextLine();
+                n.replaceAll("\\s+", "");
                 interpreter(n);
-
             } catch (Exception e) {
                 System.err.println(e);
             }
@@ -22,60 +23,81 @@ public class ex1_02 {
     private static Object interpreter(String n) {
         Object val = 0;
         int op1 = 0, op2 = 0;
-        String opr = "";
+        char opr = '+';
 
-        if (n.matches("^[a-zA-Z]*[+/*-]\\d*")) { // Operation type: variable <operator> integer
-            String[] y = n.split("((?<=+/*-)|(?=+/*-))");
-            op1 = (int) map.get(y[0]);
-            op2 = Integer.parseInt(y[2]);
-            opr = y[1];
-            val = operate(op1, op2, opr);
-        } else if (n.matches("^\\d*[+/*-][a-zA-Z]*")) { // Operation type: integer <operator> variable
-            String[] y = n.split("((?<=+/*-)|(?=+/*-))");
-            op1 = Integer.parseInt(y[0]);
-            opr = y[1];
-            op2 = (int) map.get(y[2]);
-            val = operate(op1, op2, opr);
-        } else if (n.matches("^[a-zA-Z]*[+/*-][a-zA-Z]*")) { // Operation type: variable <operator> variable
-            String[] y = n.split("((?<=+/*-)|(?=+/*-))");
-            op1 = (int) map.get(y[0]);
-            opr = y[1];
-            op2 = (int) map.get(y[2]);
-            val = operate(op1, op2, opr);
-        } else if (n.matches("^[a-zA-Z]*[=]\\w*")) { // Attribution
-            System.out.println("Attribution");
-            int i = n.indexOf("=");
-            if (!n.matches("\\d*")) {
-                // val = interpreter(n.substring(i));
+        try {
+            if (n.matches("^[a-zA-Z\\s]*[+/*-]\\s*\\d*")) { // Operation type: variable <operator> integer
+                int i = indexOfRegEx(n, "[+/*-]");
+                op1 = (int) map.get(n.substring(0, i).trim());
+                op2 = Integer.parseInt(n.substring(i + 1).trim());
+                opr = n.charAt(i);
+                val = operate(op1, op2, opr);
+                map.put(n.substring(0, i - 1).trim(), val);
+
+            } else if (n.matches("^\\d*\\s*[+/*-][\\sa-zA-Z]*")) { // Operation type: integer <operator> variable
+                int i = indexOfRegEx(n, "[+/*-]");
+                op1 = Integer.parseInt(n.substring(0, i).trim());
+                opr = n.charAt(i);
+                op2 = (int) map.get(n.substring(i + 1).trim());
+                val = operate(op1, op2, opr);
+                map.put(n.substring(i + 1).trim(), val);
+
+            } else if (n.matches("^[a-zA-Z\\s]*[+/*-][a-zA-Z\\s]*")) { // Operation type: variable <operator> variable
+                int i = indexOfRegEx(n, "[+/*-]");
+                op1 = (int) map.get(n.substring(0, i).trim());
+                opr = n.charAt(i);
+                op2 = (int) map.get(n.substring(i + 1).trim());
+                val = operate(op1, op2, opr);
+
+            } else if (n.matches("^[a-zA-Z\\s]*[=].*")) { // Attribution
+                int i = n.indexOf("=");
+                String ni = n.substring(i + 1).trim();
+                if (ni.matches("\\d*")) {
+                    val = Integer.parseInt(n.substring(i + 1).trim());
+                } else {
+                    val = interpreter(ni);
+                }
+                map.put(n.split("=")[0].trim(), val);
+                return 0;
+            } else if (n.matches("^[a-zA-Z\\s]*")) {
+                System.out.println(map.get(n));
             } else {
-                val = Integer.parseInt(n.substring(i));
+                System.err.println("Invalid format");
+                System.exit(0);
             }
-            map.put(n.split("=")[0], val);
-            return 0;
-        } else {
-            System.err.println("Invalid format");
-            System.exit(0);
+        } catch (NullPointerException e) {
+            System.err.println("Undefined variable");
         }
 
         return val;
     }
 
-    private static int operate(int op1, int op2, String opr) {
+    private static int operate(int op1, int op2, char opr) {
         int val = 0;
         switch (opr) {
-            case "*":
+            case '*':
                 val = op1 * op2;
                 break;
-            case "/":
+            case '/':
                 val = op1 / op2;
                 break;
-            case "+":
+            case '+':
                 val = op1 + op2;
                 break;
-            case "-":
+            case '-':
                 val = op1 - op2;
         }
         return val;
+    }
+
+    private static int indexOfRegEx(String strSource, String strRegExPattern) {
+        int idx = -1;
+        Pattern p = Pattern.compile(strRegExPattern);
+        Matcher m = p.matcher(strSource);
+        if (m.find()) {
+            idx = m.start();
+        }
+        return idx;
     }
 
 }
