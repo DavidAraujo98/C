@@ -39,13 +39,25 @@ public class SuffixCalculatorBaseListener implements SuffixCalculatorListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpr(SuffixCalculatorParser.ExprContext ctx) { }
+	@Override public void enterExprNumber(SuffixCalculatorParser.ExprNumberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpr(SuffixCalculatorParser.ExprContext ctx) { }
+	@Override public void exitExprNumber(SuffixCalculatorParser.ExprNumberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExprNormal(SuffixCalculatorParser.ExprNormalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExprNormal(SuffixCalculatorParser.ExprNormalContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
