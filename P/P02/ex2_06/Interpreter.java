@@ -26,10 +26,11 @@ public class Interpreter extends CalculatorBaseVisitor<Double> {
    @Override
    public Double visitAssignment(CalculatorParser.AssignmentContext ctx) {
       Hashtable<String, Double> map = new Hashtable<String, Double>();
-      String id = "";
+      String id = ctx.ID();
       Double expr = visit(ctx.expr());
       Double result = Double.parseDouble(ctx.getText());
       result = map.put(id, expr);
+      System.out.print(id + " = " + expr);
       return result;
    }
 
