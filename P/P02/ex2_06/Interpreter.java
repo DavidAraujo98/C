@@ -1,6 +1,8 @@
-import java.util.*;
+import java.util.HashMap;
 
 public class Interpreter extends CalculatorBaseVisitor<Double> {
+
+   static HashMap<String, Double> map = new HashMap<String, Double>();
 
    @Override
    public Double visitProgram(CalculatorParser.ProgramContext ctx) {
@@ -10,75 +12,50 @@ public class Interpreter extends CalculatorBaseVisitor<Double> {
    }
 
    @Override
-   public Double visitStat(CalculatorParser.StatContext ctx) {
-      Double result = null;
-      if (ctx.expr() != null) {
-         result = visit(ctx.expr());
-      }
-
-      if (result != null) {
-         System.out.println("Result: " + visit(ctx.expr()));
-      }
-
+   public Double visitStatExpr(CalculatorParser.StatExprContext ctx) {
+      System.out.println("Result: " + visit(ctx.expr()));
       return null;
    }
 
    @Override
-   public Double visitAssignment(CalculatorParser.AssignmentContext ctx) {
-      Hashtable<String, Double> map = new Hashtable<String, Double>();
-      String id = ctx.ID();
-      Double expr = visit(ctx.expr());
-      Double result = Double.parseDouble(ctx.getText());
-      result = map.put(id, expr);
-      System.out.print(id + " = " + expr);
-      return result;
+   public Double visitStatAssig(CalculatorParser.StatAssigContext ctx) {
+      System.out.println(ctx.assig().ID().getText() + " = " + visit(ctx.assig()));
+      return null;
+   }
+
+   @Override
+   public Double visitAssig(CalculatorParser.AssigContext ctx) {
+      Double r = visit(ctx.expr());
+      map.put(ctx.ID().getText(), r);
+      return r;
    }
 
    @Override
    public Double visitExprMulDivMod(CalculatorParser.ExprMulDivModContext ctx) {
-      Double num0 = visit(ctx.expr(0));
-      Double num1 = visit(ctx.expr(1));
-      Double result = null;
-      if ((num0 != null) && (num1 != null)) {
-         switch (ctx.op.getText()) {
-            case "*":
-               result = num0 * num1;
-               break;
-            case "/":
-               if (num1 == 0) {
-                  System.out.println("ERRO");
-               } else {
-                  result = num0 / num1;
-                  break;
-               }
-            case "%":
-               result = num0 % num1;
-               break;
-            default:
-               result = null;
-         }
+      Double op1 = visit(ctx.expr(0));
+      Double op2 = visit(ctx.expr(1));
+      switch (ctx.op.getText()) {
+         case "*":
+            return op1 * op2;
+         case "/":
+            return op1 / op2;
+         case "%":
+            return op1 % op2;
       }
-      return result;
+      return null;
    }
 
    @Override
    public Double visitExprAddSub(CalculatorParser.ExprAddSubContext ctx) {
-      Double num0 = visit(ctx.expr(0));
-      Double num1 = visit(ctx.expr(1));
-      Double result = null;
-      if ((num0 != null) && (num1 != null)) {
-         switch (ctx.op.getText()) {
-            case "+":
-               result = num0 + num1;
-               break;
-            case "-":
-               result = num0 - num1;
-               break;
-            default:
-               result = null;
-         }
+      Double op1 = visit(ctx.expr(0));
+      Double op2 = visit(ctx.expr(1));
+      switch (ctx.op.getText()) {
+         case "+":
+            return op1 + op2;
+         case "-":
+            return op1 - op2;
       }
-      return result;
+      return null;
    }
 
    @Override
@@ -87,13 +64,13 @@ public class Interpreter extends CalculatorBaseVisitor<Double> {
    }
 
    @Override
-   public Double visitExprInteger(CalculatorParser.ExprIntegerContext ctx) {
-      Double result = Double.parseDouble(ctx.getText());
-      return result;
+   public Double visitExprDouble(CalculatorParser.ExprDoubleContext ctx) {
+      return Double.parseDouble(ctx.getText());
    }
 
    @Override
    public Double visitExprId(CalculatorParser.ExprIdContext ctx) {
-      return visit(ctx.ID());
+      Double res = map.get(ctx.getText());
+      return res;
    }
 }

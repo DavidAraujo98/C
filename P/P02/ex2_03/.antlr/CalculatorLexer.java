@@ -1,4 +1,4 @@
-// Generated from c:\Users\david\Documents\Universidade\2Sem2021_22_Repos\C\P\P02\ex2_03\Calculator.g4 by ANTLR 4.8
+// Generated from /home/user66/Documents/C/P/P02/ex2_03/Calculator.g4 by ANTLR 4.8
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

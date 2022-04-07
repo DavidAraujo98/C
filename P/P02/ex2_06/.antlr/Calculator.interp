@@ -24,7 +24,7 @@ null
 null
 null
 null
-Integer
+Double
 ID
 NEWLINE
 WS
@@ -33,7 +33,7 @@ COMMENT
 rule names:
 program
 stat
-assignment
+assig
 expr
 
 

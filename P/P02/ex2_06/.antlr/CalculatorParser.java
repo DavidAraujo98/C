@@ -1,4 +1,4 @@
-// Generated from c:\Users\david\Documents\Universidade\2Sem2021_22_Repos\C\P\P02\ex2_06\Calculator.g4 by ANTLR 4.8
+// Generated from /home/user66/Documents/C/P/P02/ex2_06/Calculator.g4 by ANTLR 4.8
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -16,13 +16,13 @@ public class CalculatorParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, Integer=9, 
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, Double=9, 
 		ID=10, NEWLINE=11, WS=12, COMMENT=13;
 	public static final int
-		RULE_program = 0, RULE_stat = 1, RULE_assignment = 2, RULE_expr = 3;
+		RULE_program = 0, RULE_stat = 1, RULE_assig = 2, RULE_expr = 3;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"program", "stat", "assignment", "expr"
+			"program", "stat", "assig", "expr"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -35,7 +35,7 @@ public class CalculatorParser extends Parser {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, null, null, null, null, "Integer", "ID", 
+			null, null, null, null, null, null, null, null, null, "Double", "ID", 
 			"NEWLINE", "WS", "COMMENT"
 		};
 	}
@@ -114,7 +114,7 @@ public class CalculatorParser extends Parser {
 			setState(11);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__6) | (1L << Integer) | (1L << ID) | (1L << NEWLINE))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__6) | (1L << Double) | (1L << ID) | (1L << NEWLINE))) != 0)) {
 				{
 				{
 				setState(8);
@@ -141,17 +141,29 @@ public class CalculatorParser extends Parser {
 	}
 
 	public static class StatContext extends ParserRuleContext {
-		public TerminalNode NEWLINE() { return getToken(CalculatorParser.NEWLINE, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public AssignmentContext assignment() {
-			return getRuleContext(AssignmentContext.class,0);
-		}
 		public StatContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_stat; }
+	 
+		public StatContext() { }
+		public void copyFrom(StatContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class StatExprContext extends StatContext {
+		public TerminalNode NEWLINE() { return getToken(CalculatorParser.NEWLINE, 0); }
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public StatExprContext(StatContext ctx) { copyFrom(ctx); }
+	}
+	public static class StatAssigContext extends StatContext {
+		public TerminalNode NEWLINE() { return getToken(CalculatorParser.NEWLINE, 0); }
+		public AssigContext assig() {
+			return getRuleContext(AssigContext.class,0);
+		}
+		public StatAssigContext(StatContext ctx) { copyFrom(ctx); }
 	}
 
 	public final StatContext stat() throws RecognitionException {
@@ -163,12 +175,13 @@ public class CalculatorParser extends Parser {
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
+				_localctx = new StatExprContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(17);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__6) | (1L << Integer) | (1L << ID))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__6) | (1L << Double) | (1L << ID))) != 0)) {
 					{
 					setState(16);
 					expr(0);
@@ -180,6 +193,7 @@ public class CalculatorParser extends Parser {
 				}
 				break;
 			case 2:
+				_localctx = new StatAssigContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(21);
@@ -188,7 +202,7 @@ public class CalculatorParser extends Parser {
 				if (_la==ID) {
 					{
 					setState(20);
-					assignment();
+					assig();
 					}
 				}
 
@@ -209,20 +223,20 @@ public class CalculatorParser extends Parser {
 		return _localctx;
 	}
 
-	public static class AssignmentContext extends ParserRuleContext {
+	public static class AssigContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(CalculatorParser.ID, 0); }
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
-		public AssignmentContext(ParserRuleContext parent, int invokingState) {
+		public AssigContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_assignment; }
+		@Override public int getRuleIndex() { return RULE_assig; }
 	}
 
-	public final AssignmentContext assignment() throws RecognitionException {
-		AssignmentContext _localctx = new AssignmentContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_assignment);
+	public final AssigContext assig() throws RecognitionException {
+		AssigContext _localctx = new AssigContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_assig);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -276,15 +290,15 @@ public class CalculatorParser extends Parser {
 		}
 		public ExprAddSubContext(ExprContext ctx) { copyFrom(ctx); }
 	}
+	public static class ExprDoubleContext extends ExprContext {
+		public TerminalNode Double() { return getToken(CalculatorParser.Double, 0); }
+		public ExprDoubleContext(ExprContext ctx) { copyFrom(ctx); }
+	}
 	public static class ExprParentContext extends ExprContext {
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
 		public ExprParentContext(ExprContext ctx) { copyFrom(ctx); }
-	}
-	public static class ExprIntegerContext extends ExprContext {
-		public TerminalNode Integer() { return getToken(CalculatorParser.Integer, 0); }
-		public ExprIntegerContext(ExprContext ctx) { copyFrom(ctx); }
 	}
 	public static class ExprIdContext extends ExprContext {
 		public TerminalNode ID() { return getToken(CalculatorParser.ID, 0); }
@@ -310,14 +324,14 @@ public class CalculatorParser extends Parser {
 			setState(37);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case Integer:
+			case Double:
 				{
-				_localctx = new ExprIntegerContext(_localctx);
+				_localctx = new ExprDoubleContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
 				setState(31);
-				match(Integer);
+				match(Double);
 				}
 				break;
 			case T__6:

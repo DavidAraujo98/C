@@ -1,14 +1,16 @@
 grammar Calculator;
 program: stat* EOF;
-stat: expr? NEWLINE | assignment? NEWLINE;
-assignment: ID '=' expr;
+stat: expr? NEWLINE 		#StatExpr
+	| assig? NEWLINE		#StatAssig
+	;
+assig: ID '=' expr;
 expr:
 	expr op = ('*' | '/' | '%') expr	# ExprMulDivMod
 	| expr op = ('+' | '-') expr		# ExprAddSub
-	| Integer							# ExprInteger
+	| Double							# ExprDouble
 	| '(' expr ')'						# ExprParent
 	| ID								# ExprId;
-Integer: [0-9]+('.' [0-9])?;
+Double: [0-9]+('.' [0-9])?;
 ID: [a-zA-Z_]+;
 NEWLINE: '\r'? '\n';
 WS: [ \t]+ -> skip;

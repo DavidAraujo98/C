@@ -24,7 +24,7 @@ null
 null
 null
 null
-Integer
+Double
 ID
 NEWLINE
 WS
@@ -39,7 +39,7 @@ T__4
 T__5
 T__6
 T__7
-Integer
+Double
 ID
 NEWLINE
 WS
